@@ -1,0 +1,44 @@
+{
+  "name": "@naturalcycles/vue-lib",
+  "scripts": {
+    "build-prod": "build-prod-esm-cjs"
+  },
+  "dependencies": {
+    "@naturalcycles/js-lib": "^14.15.0"
+  },
+  "devDependencies": {
+    "@naturalcycles/dev-lib": "^10.29.0",
+    "@naturalcycles/frontend-lib": "^2.10.0",
+    "@types/node": "^14.14.32",
+    "jest": "^26.6.3",
+    "vue": "^2.6.12",
+    "vuex": "^3.6.2"
+  },
+  "files": [
+    "dist",
+    "dist-esm",
+    "src",
+    "!src/test",
+    "!src/**/*.test.ts",
+    "!src/**/__snapshots__",
+    "!src/**/__exclude"
+  ],
+  "main": "dist/index.js",
+  "module": "dist-esm/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NaturalCycles/vue-lib"
+  },
+  "engines": {
+    "node": ">=12.13.1"
+  },
+  "version": "0.0.0",
+  "description": "Useful functions for Vue.js",
+  "author": "Natural Cycles Team",
+  "license": "MIT"
+}
