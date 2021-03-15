@@ -1,6 +1,7 @@
 {
   "name": "@naturalcycles/vue-lib",
   "scripts": {
+    "bt": "build-prod-esm-cjs",
     "build-prod": "build-prod-esm-cjs"
   },
   "dependencies": {

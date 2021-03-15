@@ -1,11 +1,22 @@
 import { _debounce, _pick } from '@naturalcycles/js-lib'
 import type { Plugin, Store } from 'vuex'
 
+declare global {
+  interface Window {
+    onNuxtReady(cb: (nuxtApp: any) => any): void
+  }
+}
+
 export interface CreateLocalStoragePlugin<STATE> extends Plugin<STATE> {
   /**
    * Force immediate persistence (skipping Debounce, etc).
    */
   persistNow(): void
+
+  /**
+   * Useful e.g in Nuxt
+   */
+  getStore(): Store<STATE>
 }
 
 export interface CreateLocalStoragePluginCfg<STATE> {
@@ -55,27 +66,38 @@ export function createLocalStoragePlugin<STATE extends object>(
     log('<< LS', { ...state })
   }
 
-  let _store: Store<STATE>
+  let store: Store<STATE>
 
-  const plugin = (store => {
-    _store = store
+  const plugin = (passedStore => {
+    store = passedStore
     const stateStr = localStorage.getItem(storageKey)
     log('>> LS initialLoad', stateStr)
 
-    if (stateStr) {
-      store.replaceState({
-        ...emptyState, // so new default properties can be added over time
-        ...JSON.parse(stateStr),
+    const initialState = stateStr
+      ? {
+          ...emptyState, // so new default properties can be added over time
+          ...JSON.parse(stateStr),
+        }
+      : emptyState
+
+    store.replaceState(initialState)
+
+    if (typeof window.onNuxtReady !== 'undefined') {
+      window.onNuxtReady(() => {
+        log('onNuxtReady: doing store.replaceState')
+        store.replaceState(initialState)
       })
-    } else {
-      store.replaceState(emptyState)
     }
 
     store.subscribe(_debounce((_: any, state: STATE) => persist(state), debounceTime))
   }) as CreateLocalStoragePlugin<STATE>
 
   plugin.persistNow = () => {
-    persist(_store.state)
+    persist(store.state)
+  }
+
+  plugin.getStore = () => {
+    return store
   }
 
   return plugin

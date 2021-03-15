@@ -13,6 +13,8 @@
 LocalStorage persistence plugin for [Vuex](https://github.com/vuejs/vuex) 3.x (compatible with Vue
 2.x).
 
+Works in Nuxt (!).
+
 ```ts
 interface GlobalState {
   count: number
